@@ -1,11 +1,15 @@
+.ruby-version
+.ruby-gemset
+Gemfile.lock
+
 \#*
 *~
 .#*
 .DS_Store
 .idea
 .project
+*.swp
 tmp
 nbproject
-*.swp
 spec/dummy
 pkg
