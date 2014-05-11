@@ -1,38 +1,40 @@
 Spree Product Feed
 ================
 
-An extension that provides an RSS feed for products. Google Shopper attributes are also implemented.
-An RSS link is automatically appended to the `<head>` tag in the `layouts/spree_application` file.
+[![Build Status](https://travis-ci.org/think602/spree_product_feed.svg?branch=master)](https://travis-ci.org/think602/spree_product_feed)
 
-Supported versions of Spree
-=========
+An extension that provides an RSS feed for products. Google Shopper attributes
+are also implemented. An RSS link is automatically appended to the `<head>`
+tag in the `layouts/spree_application` file.
 
-any version of Spree higher than 0.70.x 
+Supported versions:  
+- 2.1.x  
+- 2.0.x  
+- 1.3.x  
+
 
 Installation
 ===============
 
 1) add the gem to your `Gemfile`:
 
-`gem 'spree_product_feed'`
+`gem 'spree_product_feed', github: 'think602/spree_product_feed', branch: 'master'`
 
 2) run bundler:
 
 `bundle install`
 
-3) BOOOM, you're done
-
 Viewing Product RSS
 ============
 
-`http://yourdomain.tld/products.rss`
+`http://example.com/feed/google.rss`
 
 Testing
 =======
 
 Be sure to add the rspec-rails gem to your Gemfile and then create a dummy test app for the specs to run against.
 
-    $ bundle exec rake test app
-    $ bundle exec rspec spec
+    $ bundle exec rake test_app
+    $ bundle exec rake spec
 
 Copyright (c) 2011 Joshua Nussbaum, released under the New BSD License
