@@ -1,4 +1,4 @@
-xml.instrucst! :xml, version: "1.0" 
+xml.instruct! :xml, version: "1.0" 
 xml.rss(version: "2.0", "xmlns:g" => "http://base.google.com/ns/1.0"){
   xml.channel{
     xml.title("#{Spree::Config[:site_name]}")
