@@ -11,6 +11,7 @@ unless ENV['TRAVIS']
   gem 'rb-fsevent', :require => false
   gem 'rb-fchange', :require => false
   gem 'libnotify'
+  gem 'bullet'
 end
 
 gem 'fuubar'
