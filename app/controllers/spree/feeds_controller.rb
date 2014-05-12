@@ -3,9 +3,9 @@ module Spree
     respond_to :rss
 
     def show
-      params.merge!(per_page: 10000)
-      @searcher = build_searcher(params)
-      @products = @searcher.retrieve_products
+      @products = Spree::Product.unscoped.active.
+        includes(taxons: [:taxonomy]).where('spree_taxonomies.name = ?', 'Brand').references('spree_taxonomies')
+      
       options = %w(google).include?(params[:platform]) ? {template: "spree/feeds/#{params[:platform]}", status: 200, layout: false} : {nothing: true, status: 404}
 
       respond_to do |format|
