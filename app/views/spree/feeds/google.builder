@@ -13,18 +13,36 @@ xml.rss(version: "2.0", "xmlns:g" => "http://base.google.com/ns/1.0"){
         xml.author(Spree::Config[:site_url])
         xml.pubDate((product.available_on || product.created_at).strftime("%a, %d %b %Y %H:%M:%S %z"))
         xml.link(product_url(product))
-        xml.guid(product.id)
+        xml.guid(product.id.to_s)
+        xml.mpu(product.sku.to_s)
         
-        xml.tag!('g:price', product.price)
+        xml.tag!('g:price', product_price(product, {format_as_currency: false}))
         xml.tag!('g:condition', 'new')
-        xml.tag!('g:id', product.id)
+        xml.tag!('g:id', product.id.to_s)
+        
+        product.shipping_category.shipping_methods.each do |shipping_method|
+          shipping_method.zones.each do |zone|
+            zone.zone_members.each do |zone_member|
+              unless zone_member.zoneable.nil?
+                xml.tag!('g:country', zone_member.zoneable.iso)
+                
+                package = Spree::Stock::Package(nil, nil)
+                package.add(product.master, 1)
+                # we need to calculate the shipping_cost in relation to the zone_member
+                price = shipping_method.calculator.compute(package).to_s # '5.0'
+                
+                xml.tag!('g:price', "#{price} USD") 
+              end
+            end
+          end
+        end
         
         case product.images.count
         when 1
-          xml.tag!('g:image_link', full_url(product.images.first.attachment.url(:large)) )
+          xml.tag!('g:image_link', full_url(product.images.first.attachment.url(:large)))
         when 2
-          xml.tag!('g:image_link', full_url(product.images.first.attachment.url(:large)) )
-          xml.tag!('g:additional_image_link', full_url(product.images.second.attachment.url(:large)) )
+          xml.tag!('g:image_link', full_url(product.images.first.attachment.url(:large)))
+          xml.tag!('g:additional_image_link', full_url(product.images.second.attachment.url(:large)))
         end
         
       end
