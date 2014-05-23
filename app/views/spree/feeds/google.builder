@@ -16,7 +16,7 @@ xml.rss(version: "2.0", "xmlns:g" => "http://base.google.com/ns/1.0"){
         xml.guid(product.id.to_s)
         xml.mpu(product.sku.to_s)
         
-        xml.tag!('g:price', product_price(product, {format_as_currency: false}))
+        xml.tag!('g:price', product.price.to_s)
         xml.tag!('g:condition', 'new')
         xml.tag!('g:id', product.id.to_s)
         
@@ -24,14 +24,17 @@ xml.rss(version: "2.0", "xmlns:g" => "http://base.google.com/ns/1.0"){
           shipping_method.zones.each do |zone|
             zone.zone_members.each do |zone_member|
               unless zone_member.zoneable.nil?
-                xml.tag!('g:country', zone_member.zoneable.iso)
-                
-                package = Spree::Stock::Package(nil, nil)
-                package.add(product.master, 1)
-                # we need to calculate the shipping_cost in relation to the zone_member
-                price = shipping_method.calculator.compute(package).to_s # '5.0'
-                
-                xml.tag!('g:price', "#{price} USD") 
+                xml.tag!('g:shipping') do 
+                  xml.tag!('g:country', zone_member.zoneable.iso)
+                  
+                  package = Spree::Stock::Package.new(nil, nil)
+                  package.add(product.master, 1)
+                  
+                  # we need to calculate the shipping_cost in relation to the zone_member
+                  price = shipping_method.calculator.compute(package).to_s # '5.0'
+                  
+                  xml.tag!('g:price', "#{price} USD") 
+                end
               end
             end
           end
