@@ -25,6 +25,10 @@ xml.rss(version: "2.0", "xmlns:g" => "http://base.google.com/ns/1.0"){
         xml.tag!('g:condition', 'new')
         xml.tag!('g:id', product.id)
         
+        if google_taxon = product.google_taxon
+          xml.tag!('g:google_product_category', google_taxon.name)
+        end
+        
         product.shipping_category.shipping_methods.each do |shipping_method|
           shipping_method.zones.each do |zone|
             zone.zone_members.each do |zone_member|

@@ -11,8 +11,10 @@ Spree::Product.class_eval do
     brand.name
   end
   
-  # def brand
-  #   brand_id = Spree::Taxonomy.find_by_name('Brand')
-  #   taxons.find_by_taxonomy_id(brand_id)
-  # end
+  def google_taxon
+    taxonomy = Spree::Taxonomy.find_by_name('Google')
+    return nil if taxonomy.nil?
+    
+    taxons.find_by_taxonomy_id(taxonomy.id)
+  end
 end
