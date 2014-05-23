@@ -6,6 +6,8 @@ xml.rss(version: "2.0", "xmlns:g" => "http://base.google.com/ns/1.0"){
     xml.description("Find out about new products on http://#{Spree::Config[:site_url]} first!")
     xml.language('en-us')
     @products.each do |product|
+      currency = Spree::Config[:currency]
+      
       xml.item do
         xml.title(product.name)
         xml.brand(product.brand_name)
@@ -16,9 +18,12 @@ xml.rss(version: "2.0", "xmlns:g" => "http://base.google.com/ns/1.0"){
         xml.guid(product.id.to_s)
         xml.mpu(product.sku.to_s)
         
-        xml.tag!('g:price', product.price.to_s)
+        availability = product.total_on_hand > 0 ? "in stock" : "out of stock"
+        xml.tag!('g:availability', availability)
+        
+        xml.tag!('g:price', "#{product.amount_in(currency)} #{currency}")
         xml.tag!('g:condition', 'new')
-        xml.tag!('g:id', product.id.to_s)
+        xml.tag!('g:id', product.id)
         
         product.shipping_category.shipping_methods.each do |shipping_method|
           shipping_method.zones.each do |zone|
@@ -29,11 +34,9 @@ xml.rss(version: "2.0", "xmlns:g" => "http://base.google.com/ns/1.0"){
                   
                   package = Spree::Stock::Package.new(nil, nil)
                   package.add(product.master, 1)
+                  shipping_cost = shipping_method.calculator.compute(package)
                   
-                  # we need to calculate the shipping_cost in relation to the zone_member
-                  price = shipping_method.calculator.compute(package).to_s # '5.0'
-                  
-                  xml.tag!('g:price', "#{price} USD") 
+                  xml.tag!('g:price', "#{shipping_cost} #{currency}") 
                 end
               end
             end
