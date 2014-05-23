@@ -3,7 +3,8 @@ module Spree
     respond_to :rss
 
     def google
-      @products = Spree::Product.
+      @products = Spree::Product.unscoped.
+        where('spree_products.deleted_at IS NULL').
         includes(:master).references('spree_products').
         includes(shipping_category: [shipping_methods: [:zones]]).references('spree_shipping_cateogry')
       
