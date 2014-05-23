@@ -1,9 +1,10 @@
 source 'http://rubygems.org'
 
-gem 'spree', 
-  :github => 'spree/spree', 
-  :branch => '2-1-stable'
+spree_branch = '2-1-stable'
 
+gem 'spree', 
+  github: 'spree/spree', branch: spree_branch
+  
 unless ENV['TRAVIS']
   gem 'guard'
   gem 'guard-rspec'
@@ -11,14 +12,19 @@ unless ENV['TRAVIS']
   gem 'rb-fsevent', :require => false
   gem 'rb-fchange', :require => false
   gem 'libnotify'
-  gem 'bullet'
+  
+  gem 'quiet_assets'
+  gem 'sprockets', '2.11.0'
+  
+  gem 'debugger'
+  gem 'pry-rails'
+  gem 'pry-debugger'
+  gem 'pry-rescue'
+  
+  gem 'fuubar'
+  
+  gem 'spree_auth_devise', 
+    github: 'spree/spree_auth_devise', branch: spree_branch
 end
-
-gem 'fuubar'
-gem 'debugger'
-
-gem 'pry-rails'
-gem 'pry-debugger'
-gem 'pry-rescue'
 
 gemspec
