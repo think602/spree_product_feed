@@ -3,7 +3,9 @@ module Spree
     respond_to :rss
 
     def google
-      @products = Spree::Product.includes(:master).references('spree_products')
+      @products = Spree::Product.
+        includes(:master).references('spree_products').
+        includes(shipping_category: [shipping_methods: [:zones]]).references('spree_shipping_cateogry')
       
       respond_to do |format|
         format.rss  { render template: 'spree/feeds/google', status: 200, layout: false }
