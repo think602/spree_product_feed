@@ -19,7 +19,7 @@ xml.rss(version: "2.0", "xmlns:g" => "http://base.google.com/ns/1.0"){
         xml.tag!('g:availability', availability)
         
         xml.tag!('g:brand', product.brand_name)
-        xml.tag!('g:mpu', product.sku.to_s)
+        xml.tag!('g:mpn', product.sku.to_s)
         xml.tag!('g:price', "#{product.amount_in(currency)} #{currency}")
         xml.tag!('g:condition', 'new')
         xml.tag!('g:id', product.id)
