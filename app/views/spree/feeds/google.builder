@@ -10,16 +10,16 @@ xml.rss(version: "2.0", "xmlns:g" => "http://base.google.com/ns/1.0"){
       
       xml.item do
         xml.title(product.name)
-        xml.brand(product.brand_name)
         xml.description(simple_format(product.description))
         xml.author(Spree::Config[:site_url])
         xml.pubDate((product.available_on || product.created_at).strftime("%a, %d %b %Y %H:%M:%S %z"))
         xml.link(product_url(product))
-        xml.tag!('g:mpu', product.sku.to_s)
         
         availability = product.total_on_hand > 0 ? "in stock" : "out of stock"
         xml.tag!('g:availability', availability)
         
+        xml.tag!('g:brand', product.brand_name)
+        xml.tag!('g:mpu', product.sku.to_s)
         xml.tag!('g:price', "#{product.amount_in(currency)} #{currency}")
         xml.tag!('g:condition', 'new')
         xml.tag!('g:id', product.id)
