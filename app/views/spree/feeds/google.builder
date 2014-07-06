@@ -30,6 +30,8 @@ xml.rss(version: "2.0", "xmlns:g" => "http://base.google.com/ns/1.0"){
         
         count = product.images.count
         
+        xml.tag!('custom:images_count', count)
+        
         if count == 1
           xml.tag!('g:image_link', full_url(product.images.first.attachment.url(:large)))
         elsif count > 1
