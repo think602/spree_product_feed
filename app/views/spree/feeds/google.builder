@@ -41,6 +41,10 @@ xml.rss(version: "2.0", "xmlns:g" => "http://base.google.com/ns/1.0"){
           shipping_method.zones.each do |zone|
             zone.zone_members.each do |zone_member|
               unless zone_member.zoneable.nil?
+                
+                # only pull data for US, Russia, and Canada
+                next unless ['US', 'RU', 'CA'].include?(zone_member.zoneable.iso)
+                
                 xml.tag!('g:shipping') do 
                   xml.tag!('g:country', zone_member.zoneable.iso)
                   
