@@ -28,6 +28,15 @@ xml.rss(version: "2.0", "xmlns:g" => "http://base.google.com/ns/1.0"){
           xml.tag!('g:google_product_category', google_taxon.name)
         end
         
+        count = product.images.count
+        
+        if count == 1
+          xml.tag!('g:image_link', full_url(product.images.first.attachment.url(:large)))
+        elsif count > 1
+          xml.tag!('g:image_link', full_url(product.images.first.attachment.url(:large)))
+          xml.tag!('g:additional_image_link', full_url(product.images.second.attachment.url(:large)))
+        end
+        
         product.shipping_category.shipping_methods.each do |shipping_method|
           shipping_method.zones.each do |zone|
             zone.zone_members.each do |zone_member|
@@ -44,14 +53,6 @@ xml.rss(version: "2.0", "xmlns:g" => "http://base.google.com/ns/1.0"){
               end
             end
           end
-        end
-        
-        case product.images.count
-        when 1
-          xml.tag!('g:image_link', full_url(product.images.first.attachment.url(:large)))
-        when 2
-          xml.tag!('g:image_link', full_url(product.images.first.attachment.url(:large)))
-          xml.tag!('g:additional_image_link', full_url(product.images.second.attachment.url(:large)))
         end
         
       end
