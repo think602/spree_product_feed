@@ -28,15 +28,16 @@ xml.rss(version: "2.0", "xmlns:g" => "http://base.google.com/ns/1.0"){
           xml.tag!('g:google_product_category', google_taxon.name)
         end
         
-        count = product.images.count
+        images = (product.master_images + product.variant_images).uniq
+        count = images.count
         
         xml.tag!('custom:images_count', count)
         
         if count == 1
-          xml.tag!('g:image_link', full_url(product.images.first.attachment.url(:large)))
+          xml.tag!('g:image_link', full_url(images.first.attachment.url(:large, timestamp: false)))
         elsif count > 1
-          xml.tag!('g:image_link', full_url(product.images.first.attachment.url(:large)))
-          xml.tag!('g:additional_image_link', full_url(product.images.second.attachment.url(:large)))
+          xml.tag!('g:image_link', full_url(images.first.attachment.url(:large)))
+          xml.tag!('g:additional_image_link', full_url(images.second.attachment.url(:large, timestamp: false)))
         end
         
         product.shipping_category.shipping_methods.each do |shipping_method|
