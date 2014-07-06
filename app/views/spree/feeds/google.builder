@@ -29,10 +29,7 @@ xml.rss(version: "2.0", "xmlns:g" => "http://base.google.com/ns/1.0"){
         end
         
         images = (product.master_images + product.variant_images).uniq
-        count = images.count
-        
-        xml.tag!('custom:images_count', count)
-        
+        count = images.size
         if count == 1
           xml.tag!('g:image_link', full_url(images.first.attachment.url(:large, timestamp: false)))
         elsif count > 1
